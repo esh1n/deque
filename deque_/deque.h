@@ -4,16 +4,12 @@
 // Each node in a doubly linked list
 
 class DequeEmptyException;
+template <class T> class Node;
 template <class T> class deque_iterator;
 template<class T>
 class deque
 {
-	struct Node
-    {
-       T data;
-       Node* next;
-       Node* prev;
-    };
+	
 	public:
 		typedef deque_iterator<T> iterator;
 		deque();//так как define NULL=0
@@ -33,8 +29,8 @@ class deque
 		void clear(){return;}
 
     private:
-		 Node* head;
-		 Node*  tail;
+		 Node<T>* head;
+		 Node<T>*  tail;
 	     int size_of_deque ;
     
 };
@@ -50,17 +46,15 @@ template <class T>
 deque<T>::deque(const deque & dek)
 {
 	deque();
-	for (Node<T> * current = dek.head; current != NULL; current = current ->next)
+	for (Node<T> * current = dek.head; current != NULL; current = current ->next_node)
                 push_back(current -> value);
 }
 template <class T>
 void deque<T>::push_back(T  value)
 {
 	// Create a new node
-			Node* temp = new Node();
-			temp->data = value;
-			temp->next = NULL;
-			temp->prev = NULL;
+			Node<T>* temp = new Node<T>(value);
+		
 
 			if ( empty() ) {
 				// Add the first element
@@ -68,8 +62,8 @@ void deque<T>::push_back(T  value)
 			}
 			else {
 				// Append to the list and fix links
-				 tail->next = temp;
-				 temp->prev = tail;
+				 tail->next_node = temp;
+				 temp->prev_node = tail;
 				 tail = temp;
 			 }
 
@@ -79,10 +73,8 @@ template <class T>
 void deque<T>::push_front(T  value)
 {
 	// Create a new node
-			Node* temp = new Node();
-			temp->data = value;
-			temp->next = NULL;
-			temp->prev = NULL;
+			Node<T>* temp = new Node<T>(value);
+			
 
 			if ( empty() ) {
 				 // Add the first element
@@ -90,8 +82,8 @@ void deque<T>::push_front(T  value)
 			 }
 			else {
             // Prepend to the list and fix links
-            temp->next = head;
-            head->prev = temp;
+            temp->next_node = head;
+            head->prev_node = temp;
             head = temp;
 			}
 
@@ -108,11 +100,11 @@ T deque<T>::pop_front()
 			T ret = head->data;
 
 			// Delete the head node and fix the links
-			Node* tmp = head;
-			if ( head->next != NULL )
+			Node<T>* tmp = head;
+			if ( head->next_node != NULL )
 			{
-				head = head->next;
-				head->prev = NULL;
+				head = head->next_node;
+				head->prev_node = NULL;
 			}
 			else
 			{
@@ -134,11 +126,11 @@ T deque<T>::pop_back()
 			T ret = tail->data;
 
 			// Delete the head node and fix the links
-			Node* temp = tail;
-			if ( tail->prev != NULL )
+			Node<T>* temp = tail;
+			if ( tail->prev_node != NULL )
 		    {
-				 tail = tail->prev;
-				 tail->next = NULL;
+				 tail = tail->prev_node;
+				 tail->next_node = NULL;
             }
 			else
 			{
@@ -181,5 +173,18 @@ public:
     {
         std::cout << "Deque empty\n";
     }
+};
+template <class T> 
+class Node 
+{
+private:
+   Node(const T & x): data(x), next_node(0), prev_node(0) {}
+
+   T data;     
+   Node<T> * next_node;
+   Node<T> * prev_node;
+
+   friend class deque<T>;
+  // friend class deque_iterator<T>;
 };
 
