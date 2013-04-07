@@ -1,12 +1,11 @@
 
 #include "stdafx.h"
 
-
 int _tmain(int argc, _TCHAR* argv[])
 {
 	
 	 // Stack behavior using a general dequeue
-    deque q;
+    deque<int> q;
     try {
         if ( q.empty() )
         {
@@ -31,7 +30,7 @@ int _tmain(int argc, _TCHAR* argv[])
     }
 
     // Queue behavior using a general dequeue
-    deque q1;
+    deque<int> q1;
     try {
         if ( q1.empty() )
         {
