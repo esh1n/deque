@@ -53,6 +53,7 @@ int _tmain(int argc, _TCHAR* argv[])
 			   break;
 		   }
            loop= (operation!='0') ;
+		   std::tcout << (deq_2[2]).c_str() << "\n";
 	}while(loop);
 	return 0;
 }

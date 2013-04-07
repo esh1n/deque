@@ -17,14 +17,15 @@ class deque
 		~deque();
 		
 		void push_front(const T & x);
-	    T pop_front();
+	    void pop_front();
         void push_back(const T & x);
-        T pop_back();
+        void pop_back();
 		
 		//ELEMENT ACCESS////
-        T front();
-		T back();
-		T* operator [](int i);
+        T & front () const;
+		T & back() const;
+		T & at(int i) const;
+		T & operator [](int i) const;
 		
 		void print_deque();
         unsigned int size() const;
@@ -71,15 +72,14 @@ deque <T>::~deque()
     first = next;
     }
 }
-/*template <class T>
-T* deque<T>::operator [](int i)
-    {// устанавливает текущим i-ый элемент и возвращает содержимое
-     // этот список можно индексировать, хотя при больших размерах списка неэффективно
-        if (_Set_by_Index(i))
-            return Item->content;
+template <class T>
+T & deque<T>::operator [](int i) const
+    {
+        if(empty())
+			throw new DequeEmptyException();
         else
-            return NULL;
-    }*/
+            return at(i);  
+    }
 template <class T>
 void deque<T>::push_back(const T & value)
 {
@@ -119,14 +119,11 @@ void deque<T>::push_front(const T&  value)
 			size_of_deque++;
 }
 template <class T>
-T deque<T>::pop_front()
+void deque<T>::pop_front() 
 {
 	if ( empty() ) {
             throw new DequeEmptyException();
-			}
-
-			 //  Data in the head node
-			T ret = head->data;
+		}
 
 			// Delete the head node and fix the links
 			Node<T>* tmp = head;
@@ -142,17 +139,14 @@ T deque<T>::pop_front()
 			size_of_deque--;
 			delete tmp;
 
-			return ret;
 }
 template <class T>
-T deque<T>::pop_back()
+void deque<T>::pop_back()
 {
 	if ( empty() ) {
             throw new DequeEmptyException();
 			}
 
-			//  Data in the tail node
-			T ret = tail->data;
 
 			// Delete the head node and fix the links
 			Node<T>* temp = tail;
@@ -168,7 +162,6 @@ T deque<T>::pop_back()
             size_of_deque--;
 		    delete temp;
 
-			return ret;
 }
 template <class T>
 unsigned int deque<T>::size() const
@@ -181,18 +174,29 @@ bool deque<T>::empty() const
 	return head == NULL;
 }
 template <class T>
-T deque<T>::front()
+T & deque<T>::front() const
 {
 	if ( empty() )
 				throw new DequeEmptyException();
 	return head->data;
 }
 template <class T>
-T deque<T>::back()
+T & deque<T>::back() const
 {
 	if ( empty() )
 				throw new DequeEmptyException();
 	return tail->data;
+}
+template <class T>
+T & deque<T>::at(int i) const
+{
+	iterator itr=begin();
+	unsigned int current_index=0;
+	while (current_index++!=i) {
+	     ++itr;
+    }
+	return *itr;
+	
 }
 template <class T>
 typename deque<T>::iterator deque<T>::begin() const
