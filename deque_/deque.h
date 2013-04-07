@@ -16,7 +16,7 @@ class deque
 		deque(const deque<T> & deque);
 		~deque();
 		
-		void push_front(T value);
+		void push_front(const T & x);
 	    T pop_front();
         void push_back(const T & x);
         T pop_back();
@@ -24,6 +24,9 @@ class deque
 		//ELEMENT ACCESS////
         T front();
 		T back();
+		T* operator [](int i);
+		
+		void print_deque();
         unsigned int size() const;
 		bool empty() const;
 		void clear(){return;}
@@ -53,6 +56,11 @@ deque<T>::deque(const deque & dek)
 		push_back(current -> data);
 }
 template <class T>
+void deque<T>::print_deque()
+{
+    
+}
+template <class T>
 deque <T>::~deque()
 {
     Node <T> * first = head;
@@ -63,6 +71,15 @@ deque <T>::~deque()
     first = next;
     }
 }
+/*template <class T>
+T* deque<T>::operator [](int i)
+    {// устанавливает текущим i-ый элемент и возвращает содержимое
+     // этот список можно индексировать, хотя при больших размерах списка неэффективно
+        if (_Set_by_Index(i))
+            return Item->content;
+        else
+            return NULL;
+    }*/
 template <class T>
 void deque<T>::push_back(const T & value)
 {
@@ -82,7 +99,7 @@ void deque<T>::push_back(const T & value)
 			size_of_deque++;
 }
 template <class T>
-void deque<T>::push_front(T  value)
+void deque<T>::push_front(const T&  value)
 {
 	// Create a new node
 			Node<T>* temp = new Node<T>(value);
