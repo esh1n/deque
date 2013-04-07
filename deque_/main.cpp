@@ -23,11 +23,13 @@ int _tmain(int argc, _TCHAR* argv[])
    
    
    bool loop=false;
+   int index=0;
    std::tcout<<"\0-exit\n";
    std::tcout<<"1-push_back\n";
    std::tcout<<"2-push_front\n";
    std::tcout<<"3-pop_back\n";
    std::tcout<<"4-pop_front\n";
+   std::tcout<<"5-[index] or at\n";
 	/////process/////////////////
 	do
 	{
@@ -49,11 +51,14 @@ int _tmain(int argc, _TCHAR* argv[])
 		   case '4':
 			   deq_2.pop_front();
 			   break;
+		   case '5':
+			   index=_tstoi(arg.c_str());
+			   std::tcout << (deq_2[index]).c_str() << "\n";
+			   break;
 		   default:
 			   break;
 		   }
            loop= (operation!='0') ;
-		   std::tcout << (deq_2[2]).c_str() << "\n";
 	}while(loop);
 	return 0;
 }
