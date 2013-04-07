@@ -15,18 +15,18 @@ class deque
 	public:
 		deque();
 		~deque(void);
-		void InsertFront(int element);
-        int RemoveFront();
-        void InsertBack(int element);
-        int RemoveBack();
-        int Front();
-        int Back();
-        int Size();
-        bool isEmpty();
+		void push_front(int element);
+        int pop_front();
+        void push_back(int element);
+        int pop_back();
+        int front();
+        int back();
+        int size();
+        bool empty();
 
     private:
-		 Node *front;
-		 Node* back;
+		 Node *head;
+		 Node* tail;
 	     int count;
     
 };

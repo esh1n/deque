@@ -3,12 +3,12 @@
 
 deque::deque()
 {
-    front = NULL;
-    back = NULL;
+    head = NULL;
+    tail = NULL;
     count = 0;
 }      
   
-void deque::InsertFront(int element)
+void deque::push_front(int element)
 {
         // Create a new node
         Node* tmp = new Node();
@@ -16,39 +16,39 @@ void deque::InsertFront(int element)
         tmp->next = NULL;
         tmp->prev = NULL;
 
-        if ( isEmpty() ) {
+        if ( empty() ) {
             // Add the first element
-            front = back = tmp;
+            head = tail = tmp;
         }
         else {
             // Prepend to the list and fix links
-            tmp->next = front;
-            front->prev = tmp;
-            front = tmp;
+            tmp->next = head;
+            head->prev = tmp;
+            head = tmp;
         }
 
         count++;
 }
 
-int deque::RemoveFront()
+int deque::pop_front()
 {
-	if ( isEmpty() ) {
+	if ( empty() ) {
             throw new DequeEmptyException();
         }
 
-        //  Data in the front node
-        int ret = front->data;
+        //  Data in the head node
+        int ret = head->data;
 
-        // Delete the front node and fix the links
-        Node* tmp = front;
-        if ( front->next != NULL )
+        // Delete the head node and fix the links
+        Node* tmp = head;
+        if ( head->next != NULL )
         {
-            front = front->next;
-            front->prev = NULL;
+            head = head->next;
+            head->prev = NULL;
         }
         else
         {
-            front = NULL;
+            head = NULL;
         }
         count--;
         delete tmp;
@@ -57,46 +57,46 @@ int deque::RemoveFront()
        
 }
 
-void deque::InsertBack(int element)
+void deque::push_back(int element)
 { // Create a new node
         Node* tmp = new Node();
         tmp->data = element;
         tmp->next = NULL;
         tmp->prev = NULL;
 
-        if ( isEmpty() ) {
+        if ( empty() ) {
             // Add the first element
-            front = back = tmp;
+            head = tail = tmp;
         }
         else {
             // Append to the list and fix links
-            back->next = tmp;
-            tmp->prev = back;
-            back = tmp;
+            tail->next = tmp;
+            tmp->prev = tail;
+            tail = tmp;
         }
 
         count++; 
 }    
 
-int deque::RemoveBack()
+int deque::pop_back()
 {
-	if ( isEmpty() ) {
+	if ( empty() ) {
             throw new DequeEmptyException();
         }
 
-        //  Data in the back node
-        int ret = back->data;
+        //  Data in the tail node
+        int ret = tail->data;
 
-        // Delete the front node and fix the links
-        Node* tmp = back;
-        if ( back->prev != NULL )
+        // Delete the head node and fix the links
+        Node* tmp = tail;
+        if ( tail->prev != NULL )
         {
-            back = back->prev;
-            back->next = NULL;
+            tail = tail->prev;
+            tail->next = NULL;
         }
         else
         {
-            back = NULL;
+            tail = NULL;
         }
         count--;
         delete tmp;
@@ -105,26 +105,25 @@ int deque::RemoveBack()
         
 }   
   
-int deque::Front()
+int deque::front()
 {          
-   if ( isEmpty() )
+   if ( empty() )
         throw new DequeEmptyException();
-   return front->data;
+   return head->data;
 }
 
-int deque::Back()
+int deque::back()
 {
-   if ( isEmpty() )
+   if ( empty() )
         throw new DequeEmptyException();
-   return back->data;
+   return tail->data;
 }
   
-int deque::Size()
+int deque::size()
 {
    return count;
 }
-
-bool deque::isEmpty()
+bool deque::empty()
 {
    return count == 0 ? true : false;
 }

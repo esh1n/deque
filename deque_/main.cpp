@@ -8,23 +8,23 @@ int _tmain(int argc, _TCHAR* argv[])
 	 // Stack behavior using a general dequeue
     deque q;
     try {
-        if ( q.isEmpty() )
+        if ( q.empty() )
         {
             std::tcout << "Deque is empty\n";
         }
 
         // Push elements
-        q.InsertBack(100);
-        q.InsertBack(200);
-        q.InsertBack(300);
+        q.push_back(100);
+        q.push_back(200);
+        q.push_back(300);
 
-        // Size of queue
-        std::tcout << "Size of dequeue = " << q.Size()<<"\n";
+        // size of queue
+        std::tcout << "size of dequeue = " << q.size()<<"\n";
 
         // Pop elements
-        std::tcout << q.RemoveBack() <<"\n";
-        std::tcout << q.RemoveBack() <<"\n";
-        std::tcout << q.RemoveBack() <<"\n";
+        std::tcout << q.pop_back() <<"\n";
+        std::tcout << q.pop_back() <<"\n";
+        std::tcout << q.pop_back() <<"\n";
     }
     catch (...) {
         std::tcout << "Some exception occured" <<"\n"; 
@@ -33,24 +33,24 @@ int _tmain(int argc, _TCHAR* argv[])
     // Queue behavior using a general dequeue
     deque q1;
     try {
-        if ( q1.isEmpty() )
+        if ( q1.empty() )
         {
             std::tcout << "\nDeque is empty";
         }
 
         // Push elements
-        q1.InsertBack(100);
-        q1.InsertBack(200);
-        q1.InsertBack(300);
+        q1.push_back(100);
+        q1.push_back(200);
+        q1.push_back(300);
 
-        // Size of queue
-        std::tcout << "Size of dequeue = " << q1.Size() << "\n";
+        // size of queue
+        std::tcout << "size of dequeue = " << q1.size() << "\n";
 
         // Pop elements
 		
-        std::tcout << q1.RemoveFront() << "\n";
-        std::tcout << q1.RemoveFront() << "\n";
-        std::tcout << q1.RemoveFront() << "\n";
+        std::tcout << q1.pop_front() << "\n";
+        std::tcout << q1.pop_front() << "\n";
+        std::tcout << q1.pop_front() << "\n";
     }
     catch (...) {
         std::tcout << "Some exception occured" <<"\n";
