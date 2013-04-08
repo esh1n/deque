@@ -13,20 +13,22 @@ class deque
 	public:
 		typedef deque_iterator<T> iterator;
 		deque();//так как define NULL=0
+		deque(int capacity);
+		deque(int capacity,T default_value);
 		deque(const deque<T> & deque);
 		~deque();
 		
-		void push_front(const T & x);
+		void push_front(const T & x);//ссылка на константное значение
 	    void pop_front();
         void push_back(const T & x);
         void pop_back();
 		
 		//ELEMENT ACCESS////
-        T & front () const;
+        T & front () const;//внутри себя ничего не изменяет
 		T & back() const;
 		T & at(int i) const;
 		T & operator [](int i) const;
-		
+		void assign(int capacity,T default_value);
 		void print_deque();
         unsigned int size() const;
 		bool empty() const;
@@ -36,30 +38,47 @@ class deque
     private:
 		 Node<T>* head;
 		 Node<T>*  tail;
-	     int size_of_deque ;
+	     int size_of_deque;
+		 void init_deque();
     
 };
 template <class T>
 deque<T>::deque()
 {
-	head = NULL;
-	tail = NULL;
-	size_of_deque = NULL;
+	init_deque();
+}
+template <class T>
+deque<T>::deque(int capacity)
+{
+	init_deque();
+	for (int index=0; index<capacity;index++)
+	{
+		Node<T>* new_node = new Node<T>(NULL);	
+		push_back(new_node);
+    }
+}
+template <class T>
+deque<T>::deque(int capacity,T default_value)
+{
+	assign(capacity,default_value);
 	
 }
 template <class T>
 deque<T>::deque(const deque & dek)
 {
-	head = NULL;
-	tail = NULL;
-	size_of_deque = NULL;
+	init_deque();
 	for (Node<T> * current = dek.head; current != NULL; current = current ->next_node)
 		push_back(current -> data);
 }
 template <class T>
-void deque<T>::print_deque()
+void deque<T>::assign(int capacity,T default_value)
 {
-    
+    init_deque();
+	for (int index=0; index<capacity;index++)
+	{
+		Node<T>* new_node = new Node<T>(default_value);	
+		push_back(new_node->data);
+    }  
 }
 template <class T>
 deque <T>::~deque()
@@ -84,36 +103,40 @@ template <class T>
 void deque<T>::push_back(const T & value)
 {
 	// Create a new node
-			Node<T>* temp = new Node<T>(value);
-		
-
-		
+			Node<T>* new_node = new Node<T>(value);	
 			if (empty())
-				head = tail = temp;
+				head = tail = new_node;
             else
             {
-				temp->prev_node = tail;
-				tail->next_node = temp;    
-				tail = temp;
+				new_node->prev_node = tail;
+				tail->next_node = new_node;    
+				tail = new_node;
             }
 			size_of_deque++;
+}
+template <class T>
+void deque<T>::init_deque()
+{
+	head=NULL;
+    tail=NULL;
+	size_of_deque=NULL;
 }
 template <class T>
 void deque<T>::push_front(const T&  value)
 {
 	// Create a new node
-			Node<T>* temp = new Node<T>(value);
+			Node<T>* new_node = new Node<T>(value);
 			
 
 			if ( empty() ) {
 				 // Add the first element
-				head = tail = temp;
+				head = tail = new_node;
 			 }
 			else {
             // Prepend to the list and fix links
-            temp->next_node = head;
-            head->prev_node = temp;
-            head = temp;
+            new_node->next_node = head;
+            head->prev_node = new_node;
+            head = new_node;
 			}
 
 			size_of_deque++;
@@ -149,7 +172,7 @@ void deque<T>::pop_back()
 
 
 			// Delete the head node and fix the links
-			Node<T>* temp = tail;
+			Node<T>* new_node = tail;
 			if ( tail->prev_node != NULL )
 		    {
 				 tail = tail->prev_node;
@@ -160,7 +183,7 @@ void deque<T>::pop_back()
 			   tail = NULL;
 			}
             size_of_deque--;
-		    delete temp;
+		    delete new_node;
 
 }
 template <class T>
@@ -277,4 +300,3 @@ bool deque_iterator<T>::operator!=(const iterator & rhs) const
 {
     return !( *this == rhs );
 }
-

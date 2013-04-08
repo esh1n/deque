@@ -10,9 +10,20 @@ void printDeque(deque<std::wstring> deq)
    }
    std::tcout << (*itr).c_str() << "\n\n";
 }
+void printDeque(deque<int> deq)
+{
+	std::tcout<< "\n";
+   deque<int>::iterator itr(deq.begin());
+   while (itr != deq.end()) {
+	   std::tcout << (*itr) << "\n";
+        ++itr;
+   }
+   std::tcout << (*itr) << "\n\n";
+}
 int _tmain(int argc, _TCHAR* argv[])
 {
-	
+	deque<int> deq_3(3,3);
+	printDeque(deq_3);
 	deque<std::wstring> deq_1;
 
    deq_1.push_back(_T("and"));  
@@ -30,6 +41,7 @@ int _tmain(int argc, _TCHAR* argv[])
    std::tcout<<"3-pop_back\n";
    std::tcout<<"4-pop_front\n";
    std::tcout<<"5-[index] or at\n";
+   
 	/////process/////////////////
 	do
 	{
