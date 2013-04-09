@@ -69,7 +69,14 @@ int _tmain(int argc, _TCHAR* argv[])
 			   }
 			   break;
 		   case '4':
-			   deq_2.pop_front();
+			     try
+			    {
+					deq_2.pop_front();
+			    }
+			    catch(DequeEmptyException ex)
+			    {
+				   std::tcout<<ex.what();
+			    }
 			   break;
 		   case '5':
 			   index=_tstoi(arg.c_str());

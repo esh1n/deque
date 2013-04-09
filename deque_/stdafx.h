@@ -11,7 +11,7 @@
 #include<string>
 #include <tchar.h>
 #include <iostream>
-#include "deque.h"
+#include "deque"
 #ifdef _UNICODE
 #  define tcout  wcout
 #  define tcin   wcin

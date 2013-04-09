@@ -12,10 +12,11 @@ class deque
 	
 	public:
 		typedef deque_iterator<T> iterator;
-		deque();//так как define NULL=0
+		deque();
 		deque(int capacity);
 		deque(int capacity,T default_value);
 		deque(const deque<T> & deque);
+		deque(T* a);
 		~deque();
 		
 		void push_front(const T & x);//ссылка на константное значение
@@ -32,7 +33,7 @@ class deque
 		void print_deque();
         unsigned int size() const;
 		bool empty() const;
-		void clear(){return;}
+		void clear();
 		iterator begin() const;
         iterator end() const;
     private:
@@ -57,6 +58,7 @@ deque<T>::deque(int capacity)
 		push_back(new_node);
     }
 }
+
 template <class T>
 deque<T>::deque(int capacity,T default_value)
 {
@@ -83,13 +85,7 @@ void deque<T>::assign(int capacity,T default_value)
 template <class T>
 deque <T>::~deque()
 {
-    Node <T> * first = head;
-    while (first != 0)
-    {
-    Node <T> * next = first->next_node;
-        delete first;
-    first = next;
-    }
+	clear();
 }
 template <class T>
 T & deque<T>::operator [](int i) const
@@ -195,6 +191,17 @@ template <class T>
 bool deque<T>::empty() const
 {
 	return tail==NULL||head == NULL;
+}
+template <class T>
+void deque<T>::clear() 
+{
+	Node <T> * first = head;
+    while (first != 0)
+    {
+    Node <T> * next = first->next_node;
+        delete first;
+    first = next;
+    }
 }
 template <class T>
 T & deque<T>::front() const
