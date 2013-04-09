@@ -95,7 +95,7 @@ template <class T>
 T & deque<T>::operator [](int i) const
     {
         if(empty())
-			throw new DequeEmptyException();
+			throw new DequeEmptyException("deque is empty");
         else
             return at(i);  
     }
@@ -145,7 +145,7 @@ template <class T>
 void deque<T>::pop_front() 
 {
 	if ( empty() ) {
-            throw new DequeEmptyException();
+            throw new DequeEmptyException("deque is empty");
 		}
 
 			// Delete the head node and fix the links
@@ -167,7 +167,7 @@ template <class T>
 void deque<T>::pop_back()
 {
 	if ( empty() ) {
-            throw new DequeEmptyException();
+            throw  DequeEmptyException("deque is empty");
 			}
 
 
@@ -194,20 +194,20 @@ unsigned int deque<T>::size() const
 template <class T>
 bool deque<T>::empty() const
 {
-	return head == NULL;
+	return tail==NULL||head == NULL;
 }
 template <class T>
 T & deque<T>::front() const
 {
 	if ( empty() )
-				throw new DequeEmptyException();
+				throw  DequeEmptyException("Deque is empty");
 	return head->data;
 }
 template <class T>
 T & deque<T>::back() const
 {
 	if ( empty() )
-				throw new DequeEmptyException();
+				throw  DequeEmptyException("Deque is empty");
 	return tail->data;
 }
 template <class T>
@@ -232,13 +232,13 @@ typename deque<T>::iterator deque<T>::end() const
         return iterator(tail);
 }
 /////CLASSES/////////////
-class DequeEmptyException
+
+class DequeEmptyException : public std::exception
 {
-public:
-    DequeEmptyException()
-    {
-        std::cout << "Deque empty\n";
-    }
+  public :
+	DequeEmptyException():std::exception() {};
+	DequeEmptyException(std::string message):std::exception(message.c_str()){}
+ ;
 };
 template <class T> 
 class Node 

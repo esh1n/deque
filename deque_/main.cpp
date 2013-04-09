@@ -22,7 +22,8 @@ void printDeque(deque<int> deq)
 }
 int _tmain(int argc, _TCHAR* argv[])
 {
-	deque<int> deq_3(3,3);
+	deque<int> deq_3;
+	deq_3.assign(3,3);
 	printDeque(deq_3);
 	deque<std::wstring> deq_1;
 
@@ -58,7 +59,14 @@ int _tmain(int argc, _TCHAR* argv[])
 			   deq_2.push_front(arg);
 			   break;
 		   case '3':
-			   deq_2.pop_back();
+			   try
+			   {
+					deq_2.pop_back();
+			   }
+			   catch(DequeEmptyException ex)
+			   {
+				   std::tcout<<ex.what();
+			   }
 			   break;
 		   case '4':
 			   deq_2.pop_front();
