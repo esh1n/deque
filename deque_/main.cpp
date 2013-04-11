@@ -25,6 +25,9 @@ int _tmain(int argc, _TCHAR* argv[])
 	deque<int> deq_3;
 	deq_3.assign(3,3);
 	printDeque(deq_3);
+	int ar[5]={1,2,3,4,5};
+	deque<int> deq_4(ar,5);
+	printDeque(deq_4);
 	deque<std::wstring> deq_1;
 
    deq_1.push_back(_T("and"));  

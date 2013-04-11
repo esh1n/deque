@@ -16,7 +16,7 @@ class deque
 		deque(int capacity);
 		deque(int capacity,T default_value);
 		deque(const deque<T> & deque);
-		deque(T* a);
+		deque(T* a,int capacity);
 		~deque();
 		
 		void push_front(const T & x);//ссылка на константное значение
@@ -49,16 +49,23 @@ deque<T>::deque()
 	init_deque();
 }
 template <class T>
+deque<T>::deque(T* a,int capacity)
+{ 
+	init_deque();
+    for (int index=0; index<capacity;index++)
+	{
+		push_back(*(a + index));
+    }
+}
+template <class T>
 deque<T>::deque(int capacity)
 {
 	init_deque();
 	for (int index=0; index<capacity;index++)
 	{
-		Node<T>* new_node = new Node<T>(NULL);	
-		push_back(new_node);
+		push_back(NULL);
     }
 }
-
 template <class T>
 deque<T>::deque(int capacity,T default_value)
 {
@@ -77,11 +84,10 @@ void deque<T>::assign(int capacity,T default_value)
 {
     init_deque();
 	for (int index=0; index<capacity;index++)
-	{
-		Node<T>* new_node = new Node<T>(default_value);	
-		push_back(new_node->data);
-    }  
+		 push_back(default_value);
+      
 }
+
 template <class T>
 deque <T>::~deque()
 {
