@@ -41,8 +41,39 @@ class deque
 		 Node<T>*  tail;
 	     int size_of_deque;
 		 void init_deque();
+		 void init_nodes(int capacity,T* a,T default_value);
     
 };
+template <class T>
+void deque<T>::init_deque()
+{
+	head=NULL;
+    tail=NULL;
+	size_of_deque=NULL;
+}
+template <class T>
+void deque<T>::init_nodes(int capacity,T* a,T default_value)
+{
+	init_deque();
+	T data;
+	bool isArray=false;
+	if (a==NULL)
+	{
+		if (default_value==NULL)
+			data=NULL;
+		else data=default_value;
+	}
+	else
+	{
+	   isArray=true;
+	}
+	for (int index=0; index<capacity;index++)
+	{
+		if (isArray)
+			push_back(*(a + index));
+		else push_back(data);
+    }
+}
 template <class T>
 deque<T>::deque()
 {
@@ -51,20 +82,19 @@ deque<T>::deque()
 template <class T>
 deque<T>::deque(T* a,int capacity)
 { 
-	init_deque();
-    for (int index=0; index<capacity;index++)
-	{
-		push_back(*(a + index));
-    }
+	init_nodes(capacity,a,NULL);
 }
+
 template <class T>
 deque<T>::deque(int capacity)
 {
-	init_deque();
-	for (int index=0; index<capacity;index++)
-	{
-		push_back(NULL);
-    }
+	init_nodes(capacity,NULL,NULL);
+}
+template <class T>
+void deque<T>::assign(int capacity,T default_value)
+{
+	init_nodes(capacity,NULL,default_value);
+      
 }
 template <class T>
 deque<T>::deque(int capacity,T default_value)
@@ -79,14 +109,7 @@ deque<T>::deque(const deque & dek)
 	for (Node<T> * current = dek.head; current != NULL; current = current ->next_node)
 		push_back(current -> data);
 }
-template <class T>
-void deque<T>::assign(int capacity,T default_value)
-{
-    init_deque();
-	for (int index=0; index<capacity;index++)
-		 push_back(default_value);
-      
-}
+
 
 template <class T>
 deque <T>::~deque()
@@ -116,13 +139,7 @@ void deque<T>::push_back(const T & value)
             }
 			size_of_deque++;
 }
-template <class T>
-void deque<T>::init_deque()
-{
-	head=NULL;
-    tail=NULL;
-	size_of_deque=NULL;
-}
+
 template <class T>
 void deque<T>::push_front(const T&  value)
 {
