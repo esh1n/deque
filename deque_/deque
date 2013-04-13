@@ -35,6 +35,8 @@ class deque
 		bool empty() const;
 		void clear();
 		void reverse();
+		void insert(iterator pos, const T & x);
+        void erase(iterator & pos); 
 		iterator begin() const;
         iterator end() const;
     private:
@@ -135,6 +137,7 @@ void deque<T>::push_back(const T & value)
             else
             {
 				new_node->prev_node = tail;
+
 				tail->next_node = new_node;    
 				tail = new_node;
             }
@@ -221,24 +224,21 @@ void deque<T>::reverse()
 {
 	if(!empty())
 	{
-		Node<T>* node=tail;
-		Node<T>* tmpPrev=node->prev_node;
-		Node<T>* tmpNext=node->next_node;
-		node->next_node=tmpPrev;
-	    node->prev_node=tmpNext;
-		node=node->next_node;
-		while(node!=NULL){
-			tmpPrev=node->prev_node;
-			tmpNext=node->next_node;
-			node->next_node= tmpPrev;
-			node->prev_node=tmpNext;
-		    node=node->next_node;
-	        }
-	     tmpPrev=head;
-		 head=tail;
-	     tail=tmpPrev; 
-    }
-	
+		Node<T> * current =head; 
+		Node<T> * prev = NULL;
+        Node<T> * next = NULL;
+		while(current!=NULL)
+        {
+			next = current->next_node;
+		    current->next_node = prev;
+            current->prev_node = next;
+            prev = current;
+            current = next;
+       }
+
+		head=prev;
+		delete current,prev,next;
+	}	
 }
 
 template <class T>
@@ -317,7 +317,8 @@ public:
    deque_iterator(): current_link(0) { }
    deque_iterator(deque_iterator<T> * source_iterator): current_node(source_iterator.current_node) { }
 
-   T & operator*();  // оператор разыменования
+   T & operator*(); 
+   Node<T> & operator->();
    iterator & operator=(const iterator & rhs);
    bool operator==(const iterator & rhs) const;
    bool operator!=(const iterator & rhs) const;
@@ -333,7 +334,7 @@ protected:
 };
 
 template <class T>
-T & deque_iterator<T>::operator*()
+T  & deque_iterator<T>::operator*() 
 {
 	return current_node -> data;
 }
