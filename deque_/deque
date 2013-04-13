@@ -6,12 +6,14 @@
 class DequeEmptyException;
 template <class T> class Node;
 template <class T> class deque_iterator;
+template <class T> class deque_reverse_iterator;
 template<class T>
 class deque
 {
 	
 	public:
 		typedef deque_iterator<T> iterator;
+		typedef deque_reverse_iterator<T> reverse_iterator;
 		deque();
 		deque(int capacity);
 		deque(int capacity,T default_value);
@@ -39,6 +41,8 @@ class deque
         void erase(iterator & pos); 
 		iterator begin() const;
         iterator end() const;
+		reverse_iterator rbegin() const;
+		reverse_iterator rend() const;
     private:
 		 Node<T>* head;
 		 Node<T>* tail;
@@ -227,7 +231,7 @@ void deque<T>::reverse()
 		Node<T> * current =head; 
 		Node<T> * prev = NULL;
         Node<T> * next = NULL;
-		while(current!=NULL)
+		while(current)
         {
 			next = current->next_node;
 		    current->next_node = prev;
@@ -287,6 +291,16 @@ typename deque<T>::iterator deque<T>::end() const
 {
         return iterator(tail);
 }
+template <class T>
+typename deque<T>::reverse_iterator deque<T>::rbegin() const
+{
+        return reverse_iterator(tail);
+}
+template <class T>
+typename deque<T>::reverse_iterator deque<T>::rend() const
+{
+        return reverse_iterator(head);
+}
 /////CLASSES/////////////
 class DequeEmptyException : public std::exception
 {
@@ -318,13 +332,20 @@ public:
    deque_iterator(deque_iterator<T> * source_iterator): current_node(source_iterator.current_node) { }
 
    T & operator*(); 
-   Node<T> & operator->();
    iterator & operator=(const iterator & rhs);
    bool operator==(const iterator & rhs) const;
    bool operator!=(const iterator & rhs) const;
-   iterator & operator++(); 
+   virtual iterator & operator++()
+   {
+	    current_node = current_node -> next_node;
+        return *this;
+   } 
    iterator operator++(int);
-   iterator & operator--(); 
+    virtual iterator & operator--()
+   {
+	   current_node = current_node -> prev_node;
+	   return *this;
+   }  
    iterator operator--(int); 
 
 protected:
@@ -332,24 +353,28 @@ protected:
 
    friend class deque<T>;
 };
+template <class T> 
+class deque_reverse_iterator:public deque_iterator<T>
+{
+public:
+   typedef deque_reverse_iterator<T> reverse_iterator;
+   virtual reverse_iterator & operator++()
+   {
+	    current_node = current_node ->prev_node;
+        return *this;
+   } 
+   virtual reverse_iterator & operator--()
+   {
+	   current_node = current_node ->next_node;
+	   return *this;
+   }  
+};
 
+////////////////////////////////////
 template <class T>
 T  & deque_iterator<T>::operator*() 
 {
 	return current_node -> data;
-}
-
-template <class T>
-deque_iterator<T> & deque_iterator<T>::operator++()
-{
-        current_node = current_node -> next_node;
-        return *this;
-}
-template <class T>
-deque_iterator<T> & deque_iterator<T>::operator--()
-{
-        current_node = current_node -> prev_node;
-        return *this;
 }
 template<class T>
 bool deque_iterator<T>::operator==(const iterator & rhs) const
