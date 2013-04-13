@@ -27,6 +27,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	printDeque(deq_3);
 	int ar[5]={1,2,3,4,5};
 	deque<int> deq_4(ar,5);
+	deq_4.reverse();
 	printDeque(deq_4);
 	deque<std::wstring> deq_1;
 

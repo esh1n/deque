@@ -34,11 +34,12 @@ class deque
         unsigned int size() const;
 		bool empty() const;
 		void clear();
+		void reverse();
 		iterator begin() const;
         iterator end() const;
     private:
 		 Node<T>* head;
-		 Node<T>*  tail;
+		 Node<T>* tail;
 	     int size_of_deque;
 		 void init_deque();
 		 void init_nodes(int capacity,T* a,T default_value);
@@ -216,10 +217,35 @@ bool deque<T>::empty() const
 	return tail==NULL||head == NULL;
 }
 template <class T>
+void deque<T>::reverse() 
+{
+	if(!empty())
+	{
+		Node<T>* node=tail;
+		Node<T>* tmpPrev=node->prev_node;
+		Node<T>* tmpNext=node->next_node;
+		node->next_node=tmpPrev;
+	    node->prev_node=tmpNext;
+		node=node->next_node;
+		while(node!=NULL){
+			tmpPrev=node->prev_node;
+			tmpNext=node->next_node;
+			node->next_node= tmpPrev;
+			node->prev_node=tmpNext;
+		    node=node->next_node;
+	        }
+	     tmpPrev=head;
+		 head=tail;
+	     tail=tmpPrev; 
+    }
+	
+}
+
+template <class T>
 void deque<T>::clear() 
 {
 	Node <T> * first = head;
-    while (first != 0)
+	while (first != NULL)
     {
     Node <T> * next = first->next_node;
         delete first;
@@ -262,7 +288,6 @@ typename deque<T>::iterator deque<T>::end() const
         return iterator(tail);
 }
 /////CLASSES/////////////
-
 class DequeEmptyException : public std::exception
 {
   public :
@@ -317,6 +342,12 @@ template <class T>
 deque_iterator<T> & deque_iterator<T>::operator++()
 {
         current_node = current_node -> next_node;
+        return *this;
+}
+template <class T>
+deque_iterator<T> & deque_iterator<T>::operator--()
+{
+        current_node = current_node -> prev_node;
         return *this;
 }
 template<class T>
