@@ -46,7 +46,7 @@ int _tmain(int argc, _TCHAR* argv[])
    std::tcout<<"3-pop_back\n";
    std::tcout<<"4-pop_front\n";
    std::tcout<<"5-[index] or at\n";
-   
+  
 	/////process/////////////////
 	do
 	{
@@ -73,7 +73,7 @@ int _tmain(int argc, _TCHAR* argv[])
 			   }
 			   break;
 		   case '4':
-			     try
+			    try
 			    {
 					deq_2.pop_front();
 			    }
@@ -84,7 +84,14 @@ int _tmain(int argc, _TCHAR* argv[])
 			   break;
 		   case '5':
 			   index=_tstoi(arg.c_str());
+			   try
+			    {
 			   std::tcout << (deq_2[index]).c_str() << "\n";
+			   }
+			   catch(std::invalid_argument ex)
+			    {
+					 std::tcout<<ex.what();
+			   }
 			   break;
 		   default:
 			   break;

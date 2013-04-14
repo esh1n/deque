@@ -12,6 +12,9 @@
 #include <tchar.h>
 #include <iostream>
 #include "deque"
+#include <assert.h>
+
+
 #ifdef _UNICODE
 #  define tcout  wcout
 #  define tcin   wcin
@@ -23,6 +26,8 @@
 #  define tString   string
 #  define tprintf   printf
 #endif
+
+
 
 
 

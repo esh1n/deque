@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
-
+#include "afxwin.h"
+#include <stdexcept>
 // Each node in a doubly linked list
 
 class DequeEmptyException;
@@ -43,6 +44,7 @@ class deque
         iterator end() const;
 		reverse_iterator rbegin() const;
 		reverse_iterator rend() const;
+		int compare(T x,T y);
     private:
 		 Node<T>* head;
 		 Node<T>* tail;
@@ -64,22 +66,21 @@ void deque<T>::init_nodes(int capacity,T* a,T default_value)
 	init_deque();
 	T data;
 	bool isArray=false;
+
 	if (a==NULL)
-	{
-		if (default_value==NULL)
-			data=NULL;
-		else data=default_value;
-	}
+		data=default_value?default_value:NULL;
 	else
-	{
 	   isArray=true;
-	}
+
 	for (int index=0; index<capacity;index++)
 	{
 		if (isArray)
 			push_back(*(a + index));
 		else push_back(data);
     }
+	ASSERT(size_of_deque==capacity);
+	ASSERT(head);
+	ASSERT(tail);
 }
 template <class T>
 deque<T>::deque()
@@ -113,8 +114,12 @@ template <class T>
 deque<T>::deque(const deque & dek)
 {
 	init_deque();
+	ASSERT(!dek.empty());
 	for (Node<T> * current = dek.head; current != NULL; current = current ->next_node)
 		push_back(current -> data);
+	ASSERT(size_of_deque==dek.size());
+	ASSERT(head);
+	ASSERT(tail);
 }
 
 
@@ -124,93 +129,94 @@ deque <T>::~deque()
 	clear();
 }
 template <class T>
-T & deque<T>::operator [](int i) const
-    {
-        if(empty())
-			throw new DequeEmptyException("deque is empty");
-        else
-            return at(i);  
-    }
+ T & deque<T>::operator [](int i) const
+{
+    if(empty())
+	   throw new DequeEmptyException("deque is empty");
+    else
+       return at(i);  
+}
+template <class T>
+T & deque<T>::at(int i) const
+{
+	if(i<size_of_deque)
+	{ 
+		iterator itr=begin();
+		for(int current_index=0;current_index!=i;current_index++)
+		   ++itr;
+		return *itr;
+	}
+	else 
+		throw std::invalid_argument("Invalid index");
+	 
+}
 template <class T>
 void deque<T>::push_back(const T & value)
 {
 	// Create a new node
-			Node<T>* new_node = new Node<T>(value);	
-			if (empty())
-				head = tail = new_node;
-            else
-            {
-				new_node->prev_node = tail;
-
-				tail->next_node = new_node;    
-				tail = new_node;
-            }
-			size_of_deque++;
+	Node<T>* new_node = new Node<T>(value);	
+	if (empty())
+		head = tail = new_node;
+    else
+    {
+		new_node->insertAfter(tail); 
+		ASSERT(new_node->prev_node==tail);
+		tail = new_node;
+     }
+	 size_of_deque++;
 }
 
 template <class T>
 void deque<T>::push_front(const T&  value)
 {
 	// Create a new node
-			Node<T>* new_node = new Node<T>(value);
-			
-
-			if ( empty() ) {
-				 // Add the first element
-				head = tail = new_node;
-			 }
-			else {
-            // Prepend to the list and fix links
-            new_node->next_node = head;
-            head->prev_node = new_node;
-            head = new_node;
-			}
-
-			size_of_deque++;
+	Node<T>* new_node = new Node<T>(value);
+	if ( empty() ) 
+	{
+	 // Add the first element
+		head = tail = new_node;
+	}
+	else 
+	{
+      // Prepend to the list and fix links
+	  new_node->insertBefore(head);
+	  ASSERT(new_node->next_node==head);
+      head = new_node;
+	}
+    size_of_deque++;
 }
 template <class T>
 void deque<T>::pop_front() 
 {
-	if ( empty() ) {
+	if (empty()) 
             throw new DequeEmptyException("deque is empty");
-		}
+    // Delete the head node and fix the links
+	if ( head->next_node != NULL )
+	{
+		head = head->next_node;
+		head->prev_node = NULL;
+	}
+	else
+		head = NULL;
 
-			// Delete the head node and fix the links
-			Node<T>* tmp = head;
-			if ( head->next_node != NULL )
-			{
-				head = head->next_node;
-				head->prev_node = NULL;
-			}
-			else
-			{
-				head = NULL;
-			}
-			size_of_deque--;
-			delete tmp;
+	size_of_deque--;
 
 }
 template <class T>
 void deque<T>::pop_back()
 {
-	if ( empty() ) {
-            throw  DequeEmptyException("deque is empty");
-			}
-
-
-			// Delete the head node and fix the links
-			Node<T>* new_node = tail;
-			if ( tail->prev_node != NULL )
-		    {
-				 tail = tail->prev_node;
-				 tail->next_node = NULL;
-            }
-			else
-			{
-			   tail = NULL;
-			}
-            size_of_deque--;
-		    delete new_node;
+	if (empty()) 
+       throw  DequeEmptyException("deque is empty");
+	// Delete the head node and fix the links
+	if ( tail->prev_node != NULL )
+	{
+		tail = tail->prev_node;
+		tail->next_node = NULL;
+    }
+	else
+		 tail = NULL;
+            
+	size_of_deque--;
 
 }
 template <class T>
@@ -226,32 +232,31 @@ bool deque<T>::empty() const
 template <class T>
 void deque<T>::reverse() 
 {
-	if(!empty())
-	{
-		Node<T> * current =head; 
-		Node<T> * prev = NULL;
-        Node<T> * next = NULL;
-		while(current)
-        {
-			next = current->next_node;
-		    current->next_node = prev;
-            current->prev_node = next;
-            prev = current;
-            current = next;
-       }
-
-		head=prev;
-		delete current,prev,next;
-	}	
+	if(empty())
+		throw new DequeEmptyException("deque is empty");
+	Node<T> * current =head; 
+	Node<T> * prev = NULL;
+    Node<T> * next = NULL;
+	while(current)
+    {
+		next = current->next_node;
+		current->prev_node = next;
+		current->next_node = prev;
+        prev = current;
+        current = next;
+    }
+    head=prev;
+	delete current,prev,next;
+		
 }
 
 template <class T>
 void deque<T>::clear() 
 {
 	Node <T> * first = head;
-	while (first != NULL)
+	while (first)
     {
-    Node <T> * next = first->next_node;
+        Node <T> * next = first->next_node;
         delete first;
     first = next;
     }
@@ -259,28 +264,39 @@ void deque<T>::clear()
 template <class T>
 T & deque<T>::front() const
 {
-	if ( empty() )
-				throw  DequeEmptyException("Deque is empty");
+	if (empty())
+		throw  DequeEmptyException("Deque is empty");
+	ASSERT(head);
+	if(head->data==NULL) 
+		throw std::exception("Null reference");
 	return head->data;
 }
 template <class T>
 T & deque<T>::back() const
 {
-	if ( empty() )
-				throw  DequeEmptyException("Deque is empty");
+	if (empty())
+		throw  DequeEmptyException("Deque is empty");
+	ASSERT(tail);
+	if(tail->data==NULL) 
+		throw std::exception("Null reference");
 	return tail->data;
 }
-template <class T>
-T & deque<T>::at(int i) const
+
+template <>
+int deque<int>::compare(int x,int y)
 {
-	iterator itr=begin();
-	unsigned int current_index=0;
-	while (current_index++!=i) {
-	     ++itr;
-    }
-	return *itr;
+	//return x>y?1:(x<y?-1:0);
+	if(x>y)return 1;
+	if(x<y)return -1;
+	return 0;
 	
 }
+template <>
+int deque<std::string>::compare(std::string x,std::string y)
+{
+	return x.compare(y);
+}
+
 template <class T>
 typename deque<T>::iterator deque<T>::begin() const
 {
@@ -318,7 +334,18 @@ private:
    T data;     
    Node<T> * next_node;
    Node<T> * prev_node;
-
+   void insertAfter(Node<T> * node)
+   {
+	    prev_node = node;
+		node->next_node = this;    
+		
+   }
+   void insertBefore(Node<T> * node)
+   {
+	  next_node = node;
+      node->prev_node = this;  
+   }
+   
    friend class deque<T>;
    friend class deque_iterator<T>;
 };
@@ -328,7 +355,7 @@ public:
    typedef deque_iterator<T> iterator;
 
    deque_iterator(Node<T> * source_link): current_node(source_link) { }
-   deque_iterator(): current_link(0) { }
+   deque_iterator(): current_node(0) { }
    deque_iterator(deque_iterator<T> * source_iterator): current_node(source_iterator.current_node) { }
 
    T & operator*(); 
@@ -341,7 +368,7 @@ public:
         return *this;
    } 
    iterator operator++(int);
-    virtual iterator & operator--()
+   virtual iterator & operator--()
    {
 	   current_node = current_node -> prev_node;
 	   return *this;
@@ -350,9 +377,9 @@ public:
 
 protected:
    Node<T> * current_node;
-
    friend class deque<T>;
 };
+
 template <class T> 
 class deque_reverse_iterator:public deque_iterator<T>
 {
@@ -374,6 +401,7 @@ public:
 template <class T>
 T  & deque_iterator<T>::operator*() 
 {
+	ASSERT(current_node);
 	return current_node -> data;
 }
 template<class T>
@@ -381,7 +409,6 @@ bool deque_iterator<T>::operator==(const iterator & rhs) const
 {
     return ( this->current_node == rhs.current_node ); 
 }
-
 template <class T>
 bool deque_iterator<T>::operator!=(const iterator & rhs) const
 {
