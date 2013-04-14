@@ -33,7 +33,6 @@ class deque
 		T & at(int i) const;
 		T & operator [](int i) const;
 		void assign(int capacity,T default_value);
-		void print_deque();
         unsigned int size() const;
 		bool empty() const;
 		void clear();
@@ -50,7 +49,7 @@ class deque
 		 Node<T>* tail;
 	     int size_of_deque;
 		 void init_deque();
-		 void init_nodes(int capacity,T* a,T default_value);
+		 void init_nodes(int capacity,T* a,T default_value,bool is_value_null);
     
 };
 template <class T>
@@ -61,14 +60,14 @@ void deque<T>::init_deque()
 	size_of_deque=NULL;
 }
 template <class T>
-void deque<T>::init_nodes(int capacity,T* a,T default_value)
+void deque<T>::init_nodes(int capacity,T* a,T default_value,bool is_value_null)
 {
 	init_deque();
 	T data;
 	bool isArray=false;
 
 	if (a==NULL)
-		data=default_value?default_value:NULL;
+		data=is_value_null?NULL:default_value;
 	else
 	   isArray=true;
 
@@ -90,18 +89,18 @@ deque<T>::deque()
 template <class T>
 deque<T>::deque(T* a,int capacity)
 { 
-	init_nodes(capacity,a,NULL);
+	init_nodes(capacity,a,NULL,true);
 }
 
 template <class T>
 deque<T>::deque(int capacity)
 {
-	init_nodes(capacity,NULL,NULL);
+	init_nodes(capacity,NULL,NULL,true);
 }
 template <class T>
 void deque<T>::assign(int capacity,T default_value)
 {
-	init_nodes(capacity,NULL,default_value);
+	init_nodes(capacity,NULL,default_value,false);
       
 }
 template <class T>
@@ -260,6 +259,7 @@ void deque<T>::clear()
         delete first;
     first = next;
     }
+	//init_deque();
 }
 template <class T>
 T & deque<T>::front() const
@@ -267,8 +267,6 @@ T & deque<T>::front() const
 	if (empty())
 		throw  DequeEmptyException("Deque is empty");
 	ASSERT(head);
-	if(head->data==NULL) 
-		throw std::exception("Null reference");
 	return head->data;
 }
 template <class T>
@@ -277,8 +275,6 @@ T & deque<T>::back() const
 	if (empty())
 		throw  DequeEmptyException("Deque is empty");
 	ASSERT(tail);
-	if(tail->data==NULL) 
-		throw std::exception("Null reference");
 	return tail->data;
 }
 
