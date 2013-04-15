@@ -27,6 +27,12 @@
     <ClInclude Include="deque">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
+    <ClInclude Include="dequeEmptyException.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="node">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

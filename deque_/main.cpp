@@ -15,7 +15,7 @@ int _tmain(int argc, _TCHAR* argv[])
 {
    deque<std::wstring> deq_1(5,_T("sample"));
    deque<std::wstring> deq_2(deq_1);
-   bool loop=false;
+   int loop;
    int index=0;
    std::tcout<<"\0-exit\n";
    std::tcout<<"1-push_back\n";

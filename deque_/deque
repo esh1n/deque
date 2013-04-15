@@ -2,9 +2,8 @@
 #include <iostream>
 #include "afxwin.h"
 #include <stdexcept>
-// Each node in a doubly linked list
+#include "dequeEmptyException.h"
 
-class DequeEmptyException;
 template <class T> class Node;
 template <class T> class deque_iterator;
 template <class T> class deque_reverse_iterator;
@@ -54,6 +53,7 @@ class deque
 		 void init_nodes(int capacity,T* a,T default_value,bool is_value_null);
     
 };
+//////////START- PRIVATE METHODS///////////////////////////
 template <class T>
 void deque<T>::init_deque()
 {
@@ -83,6 +83,9 @@ void deque<T>::init_nodes(int capacity,T* a,T default_value,bool is_value_null)
 	ASSERT(head);
 	ASSERT(tail);
 }
+//////////END- PRIVATE METHODS///////////////////////////
+
+//////////MEMBER-FUNCTIONS(Constructor,destructor,=)///////////
 template <class T>
 deque<T>::deque()
 {
@@ -123,17 +126,71 @@ deque<T>::deque(const deque & dek)
 	ASSERT(tail);
 }
 
-
 template <class T>
 deque <T>::~deque()
 {
 	clear();
 }
+
+/////////////CAPACITY////////
+template <class T>
+unsigned int deque<T>::size() const
+{
+	return size_of_deque;
+}
+template <class T>
+bool deque<T>::empty() const
+{
+	return tail==NULL||head == NULL;
+}
+////////////END-CAPACITY/////
+
+/////////////ITERATORS///////
+template <class T>
+typename deque<T>::iterator deque<T>::begin() const
+{
+        return iterator(head);
+}
+template <class T>
+typename deque<T>::iterator deque<T>::end() const
+{
+        return iterator(tail);
+}
+template <class T>
+typename deque<T>::reverse_iterator deque<T>::rbegin() const
+{
+        return reverse_iterator(tail);
+}
+template <class T>
+typename deque<T>::reverse_iterator deque<T>::rend() const
+{
+        return reverse_iterator(head);
+}
+////////////END-ITERATORS////
+
+////ELEMENT -ACCESS//////////
+template <class T>
+T & deque<T>::front() const
+{
+	if (empty())
+		throw  DequeEmptyException("Deque is empty");
+	ASSERT(head);
+	return head->data;
+}
+template <class T>
+T & deque<T>::back() const
+{
+	if (empty())
+		throw  DequeEmptyException("Deque is empty");
+	ASSERT(tail);
+	return tail->data;
+}
+
 template <class T>
  T & deque<T>::operator [](int i) const
 {
     if(empty())
-	   throw new DequeEmptyException("deque is empty");
+	   throw  DequeEmptyException("deque is empty");
     else
        return at(i);  
 }
@@ -151,6 +208,9 @@ T & deque<T>::at(int i) const
 		throw std::invalid_argument("Invalid index");
 	 
 }
+/////END-ELEMENT ACCESS//////
+
+///////////MODIFIERS///////////
 template <class T>
 void deque<T>::push_back(const T & value)
 {
@@ -166,7 +226,6 @@ void deque<T>::push_back(const T & value)
      }
 	 size_of_deque++;
 }
-
 template <class T>
 void deque<T>::push_front(const T&  value)
 {
@@ -222,16 +281,7 @@ void deque<T>::pop_back()
 	size_of_deque--;
 
 }
-template <class T>
-unsigned int deque<T>::size() const
-{
-	return size_of_deque;
-}
-template <class T>
-bool deque<T>::empty() const
-{
-	return tail==NULL||head == NULL;
-}
+
 template <class T>
 void deque<T>::reverse() 
 {
@@ -258,29 +308,13 @@ void deque<T>::clear()
 {
 	while (!empty())
         pop_back();
-    
 }
-template <class T>
-T & deque<T>::front() const
-{
-	if (empty())
-		throw  DequeEmptyException("Deque is empty");
-	ASSERT(head);
-	return head->data;
-}
-template <class T>
-T & deque<T>::back() const
-{
-	if (empty())
-		throw  DequeEmptyException("Deque is empty");
-	ASSERT(tail);
-	return tail->data;
-}
+/////////////END-MODIFIERS//////////////
 
+//////START PARTIAL IMPLEMENTATION////////////////
 template <>
 int deque<int>::compare(int x,int y)
 {
-	//return x>y?1:(x<y?-1:0);
 	if(x>y)return 1;
 	if(x<y)return -1;
 	return 0;
@@ -291,59 +325,10 @@ int deque<std::string>::compare(std::string x,std::string y)
 {
 	return x.compare(y);
 }
+//////END PARTIAL IMPLEMENTATION////////////////
 
-template <class T>
-typename deque<T>::iterator deque<T>::begin() const
-{
-        return iterator(head);
-}
-template <class T>
-typename deque<T>::iterator deque<T>::end() const
-{
-        return iterator(tail);
-}
-template <class T>
-typename deque<T>::reverse_iterator deque<T>::rbegin() const
-{
-        return reverse_iterator(tail);
-}
-template <class T>
-typename deque<T>::reverse_iterator deque<T>::rend() const
-{
-        return reverse_iterator(head);
-}
-/////CLASSES/////////////
-class DequeEmptyException : public std::exception
-{
-  public :
-	DequeEmptyException():std::exception() {};
-	DequeEmptyException(std::string message):std::exception(message.c_str()){}
- ;
-};
-template <class T> 
-class Node 
-{
-private:
-   Node(const T & x): data(x), next_node(0), prev_node(0) {}
 
-   T data;     
-   Node<T> * next_node;
-   Node<T> * prev_node;
-   void insertAfter(Node<T> * node)
-   {
-	    prev_node = node;
-		node->next_node = this;    
-		
-   }
-   void insertBefore(Node<T> * node)
-   {
-	  next_node = node;
-      node->prev_node = this;  
-   }
-   
-   friend class deque<T>;
-   friend class deque_iterator<T>;
-};
+/////////////////START-DEQUE-ITERATOR/////////////////////////
 template <class T> class deque_iterator
 {
 public:
@@ -391,8 +376,6 @@ public:
 	   return *this;
    }  
 };
-
-////////////////////////////////////
 template <class T>
 T  & deque_iterator<T>::operator*() 
 {
@@ -409,3 +392,30 @@ bool deque_iterator<T>::operator!=(const iterator & rhs) const
 {
     return !( *this == rhs );
 }
+/////////////////END-DEQUE-ITERATOR/////////////////////////
+
+/////NODE/////////////////////////
+template <class T> 
+class Node 
+{
+private:
+   Node(const T & x): data(x), next_node(0), prev_node(0) {}
+
+   T data;     
+   Node<T> * next_node;
+   Node<T> * prev_node;
+   void insertAfter(Node<T> * node)
+   {
+	    prev_node = node;
+		node->next_node = this;    
+		
+   }
+   void insertBefore(Node<T> * node)
+   {
+	  next_node = node;
+      node->prev_node = this;  
+   }
+   
+   friend class deque<T>;
+   friend class deque_iterator<T>;
+};

@@ -1,0 +1,26 @@
+#pragma once
+#include "deque"
+template <class T> 
+class Node 
+{
+private:
+   Node(const T & x): data(x), next_node(0), prev_node(0) {}
+
+   T data;     
+   Node<T> * next_node;
+   Node<T> * prev_node;
+   void insertAfter(Node<T> * node)
+   {
+	    prev_node = node;
+		node->next_node = this;    
+		
+   }
+   void insertBefore(Node<T> * node)
+   {
+	  next_node = node;
+      node->prev_node = this;  
+   }
+   
+   friend class deque<T>;
+   friend class deque_iterator<T>;
+};
