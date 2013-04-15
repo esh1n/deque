@@ -32,6 +32,8 @@ class deque
 		T & back() const;
 		T & at(int i) const;
 		T & operator [](int i) const;
+		deque<T>& operator=(const deque<T>& right);
+		//{return deque(right);}
 		void assign(int capacity,T default_value);
         unsigned int size() const;
 		bool empty() const;
@@ -190,6 +192,7 @@ void deque<T>::pop_front()
 	if (empty()) 
             throw new DequeEmptyException("deque is empty");
     // Delete the head node and fix the links
+	Node<T>* linkHead=head;
 	if ( head->next_node != NULL )
 	{
 		head = head->next_node;
@@ -197,7 +200,7 @@ void deque<T>::pop_front()
 	}
 	else
 		head = NULL;
-
+	delete linkHead;
 	size_of_deque--;
 
 }
@@ -207,6 +210,7 @@ void deque<T>::pop_back()
 	if (empty()) 
        throw  DequeEmptyException("deque is empty");
 	// Delete the head node and fix the links
+	Node<T>* linkTail=tail;
 	if ( tail->prev_node != NULL )
 	{
 		tail = tail->prev_node;
@@ -214,7 +218,7 @@ void deque<T>::pop_back()
     }
 	else
 		 tail = NULL;
-            
+    delete linkTail;        
 	size_of_deque--;
 
 }
@@ -232,7 +236,7 @@ template <class T>
 void deque<T>::reverse() 
 {
 	if(empty())
-		throw new DequeEmptyException("deque is empty");
+		throw  DequeEmptyException("deque is empty");
 	Node<T> * current =head; 
 	Node<T> * prev = NULL;
     Node<T> * next = NULL;
@@ -252,14 +256,9 @@ void deque<T>::reverse()
 template <class T>
 void deque<T>::clear() 
 {
-	Node <T> * first = head;
-	while (first)
-    {
-        Node <T> * next = first->next_node;
-        delete first;
-    first = next;
-    }
-	//init_deque();
+	while (!empty())
+        pop_back();
+    
 }
 template <class T>
 T & deque<T>::front() const
@@ -383,12 +382,13 @@ public:
    typedef deque_reverse_iterator<T> reverse_iterator;
    virtual reverse_iterator & operator++()
    {
-	    current_node = current_node ->prev_node;
+	   --dynamic_cast<deque_iterator>(this));
+	  
         return *this;
    } 
    virtual reverse_iterator & operator--()
    {
-	   current_node = current_node ->next_node;
+	   ++dynamic_cast<deque_iterator>(this));
 	   return *this;
    }  
 };

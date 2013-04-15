@@ -3,7 +3,7 @@
 void printDeque(deque<std::wstring> deq)
 {
 	std::tcout<< "\n";
-   deque<std::wstring>::iterator itr(deq.begin());
+   deque<std::wstring>::reverse_iterator itr(deq.rbegin());
    while (itr != deq.end()) {
 	   std::tcout << (*itr).c_str() << "\n";
         ++itr;
@@ -28,23 +28,30 @@ int _tmain(int argc, _TCHAR* argv[])
    std::tcout<<"8-front\n";
    std::tcout<<"9-size\n";
    std::tcout<<"10-clear\n";
-  
+   int iOperation=1;
 	/////process/////////////////
 	do
 	{
+		if(!deq_2.empty())
 		   printDeque(deq_2);
-		   TCHAR operation;
+		else   
+		{
+				std::tcout <<"\ndeq is empty\n";
+			
+		}
+		   std::wstring operation;
 		   std::wstring arg;
 		   std::tcin>> operation>>arg; 
-		   switch (operation)
+		   iOperation= _tstoi(operation.c_str());
+		   switch (iOperation)
 		   {
-		   case '1':
+		   case 1:
 			   deq_2.push_back(arg);
 			   break;
-		   case '2':
+		   case 2:
 			   deq_2.push_front(arg);
 			   break;
-		   case '3':
+		   case 3:
 			   try
 			   {
 					deq_2.pop_back();
@@ -54,17 +61,17 @@ int _tmain(int argc, _TCHAR* argv[])
 				   std::tcout<<ex.what();
 			   }
 			   break;
-		   case '4':
+		   case 4:
 			    try
 			    {
 					deq_2.pop_front();
 			    }
-			    catch(DequeEmptyException ex)
+			    catch(DequeEmptyException& ex)
 			    {
 				   std::tcout<<ex.what();
 			    }
 			   break;
-		   case '5':
+		   case 5:
 			   index=_tstoi(arg.c_str());
 			   try
 			   {
@@ -75,26 +82,26 @@ int _tmain(int argc, _TCHAR* argv[])
 					std::tcout<<ex.what();
 			   }
 			   break;
-		   case '6':
+		   case 6:
 			   deq_2.reverse();
 			   break;
-          case '7':
+          case 7:
 			   std::tcout <<"\n"<< (deq_2.back()).c_str() << "\n";
 			   break;
-		  case '8':
+		  case 8:
 			   std::tcout <<"\n"<< (deq_2.front()).c_str() << "\n";
 			   break;
-		  case '9':
+		  case 9:
 			  std::tcout <<"\n"<< deq_2.size() << "\n";
 			   break;
-		  case '10':
-				   deq_2.clear() ;
-				   std::tcout <<"\n\n";
+		  case 10:
+				deq_2.clear() ;
+				std::tcout <<"\n\n";
 			   break;
 		   default:
 			   break;
 		   }
-           loop= (operation!='0') ;
+           loop= operation.compare(_T("0")) ;
 	}while(loop);
 	return 0;
 }
