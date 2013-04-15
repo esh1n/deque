@@ -3,7 +3,7 @@
 void printDeque(deque<std::wstring> deq)
 {
 	std::tcout<< "\n";
-   deque<std::wstring>::reverse_iterator itr(deq.rbegin());
+   deque<std::wstring>::iterator itr(deq.begin());
    while (itr != deq.end()) {
 	   std::tcout << (*itr).c_str() << "\n";
         ++itr;

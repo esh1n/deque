@@ -382,13 +382,12 @@ public:
    typedef deque_reverse_iterator<T> reverse_iterator;
    virtual reverse_iterator & operator++()
    {
-	   --dynamic_cast<deque_iterator>(this));
-	  
+	    current_node = current_node ->prev_node;
         return *this;
    } 
    virtual reverse_iterator & operator--()
    {
-	   ++dynamic_cast<deque_iterator>(this));
+	   current_node = current_node ->next_node;
 	   return *this;
    }  
 };
